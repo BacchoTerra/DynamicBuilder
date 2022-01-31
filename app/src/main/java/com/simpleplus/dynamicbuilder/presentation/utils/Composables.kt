@@ -1,83 +1,31 @@
-package com.simpleplus.dynamicbuilder
+package com.simpleplus.dynamicbuilder.presentation.utils
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.simpleplus.dynamicbuilder.R
+import com.simpleplus.dynamicbuilder.model.DynamicChoiceBox
 import com.simpleplus.dynamicbuilder.model.DynamicImage
 import com.simpleplus.dynamicbuilder.model.DynamicText
 import com.simpleplus.dynamicbuilder.model.Dynamics
-import com.simpleplus.dynamicbuilder.ui.theme.DynamicBuilderTheme
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val uiItems = listOf<Dynamics>(
-
-            DynamicImage(
-                R.drawable.ic_android_black_24dp,
-                96,
-                96,
-                spaceTop = 32,
-                horizontalAlignment = Dynamics.Companion.H_ALIGNMENT_CENTER
-            ),
-            DynamicText(
-                "Qual som o animal acima faz?",
-                style = DynamicText.STYLE_H5,
-                spaceTop = 24,
-                horizontalAlignment = Dynamics.H_ALIGNMENT_CENTER
-            ),
-            DynamicText(
-                "Clique na alternatica correta!",
-                style = DynamicText.STYLE_NORMAL,
-                spaceTop = 16,
-                horizontalAlignment = Dynamics.H_ALIGNMENT_CENTER
-            )
-        )
-
-        setContent {
-            DynamicBuilderTheme {
-                // A surface container using the 'background' color from the theme
-                Surface() {
-
-                    val list by remember {
-                        mutableStateOf(uiItems)
-                    }
-
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        for (i in list) {
-
-                            when (i) {
-                                is DynamicText -> DynamicText(dynamicText = i)
-                                is DynamicImage -> DynamicImage(dynamicImage = i)
-
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-}
-
 
 @Composable
-private fun DynamicText(dynamicText: DynamicText) {
+fun DynamicText(dynamicText: DynamicText) {
 
     Text(
         text = dynamicText.text,
@@ -109,7 +57,7 @@ private fun DynamicText(dynamicText: DynamicText) {
 }
 
 @Composable
-private fun DynamicImage(dynamicImage: DynamicImage) {
+fun DynamicImage(dynamicImage: DynamicImage) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -134,4 +82,82 @@ private fun DynamicImage(dynamicImage: DynamicImage) {
                 )
         )
     }
+}
+
+@Composable
+fun DynamicChoiceBox(dynamicBox: DynamicChoiceBox) {
+
+    Box(
+        modifier = Modifier
+            .background(
+                if (dynamicBox.isRight) Color(0xFF9CCC65) else Color(0xFF29B6F6),
+                RoundedCornerShape(16.dp)
+            )
+            .padding(top = 1.dp, bottom = 8.dp, start = 1.dp, end = 1.dp)
+            .background(
+                if (dynamicBox.isRight) Color(0xFFE2F5CD) else MaterialTheme.colors.surface,
+                RoundedCornerShape(16.dp)
+            )
+    ) {
+
+        Column(
+            modifier = Modifier
+                .height(150.dp)
+                .width(180.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            dynamicBox.text?.let {
+
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.h5,
+                    textAlign = TextAlign.Center,
+                )
+
+            }
+
+            dynamicBox.image?.let {
+
+                Icon(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .size(40.dp)
+                )
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun Prev() {
+
+    val box by remember {
+        mutableStateOf(DynamicChoiceBox("Simple Text", R.drawable.ic_baseline_adb_24, true))
+    }
+
+    val box2 by remember {
+        mutableStateOf(
+           DynamicChoiceBox(
+                "Slightly larger text",
+                R.drawable.ic_baseline_adb_24,
+                false
+            )
+        )
+    }
+
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxSize()) {
+
+        DynamicChoiceBox(dynamicBox = box)
+        DynamicChoiceBox(dynamicBox = box2)
+
+    }
+
+
 }

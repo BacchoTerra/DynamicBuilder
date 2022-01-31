@@ -1,6 +1,6 @@
 package com.simpleplus.dynamicbuilder.model
 
-open class Dynamics() {
+open class Dynamics (val type : DynamicsTypes){
 
     companion object {
         const val H_ALIGNMENT_START = 0
@@ -8,11 +8,17 @@ open class Dynamics() {
         const val H_ALIGNMENT_END = 2
     }
 
+    enum class DynamicsTypes {
+        TEXT,
+        IMAGE,
+        CHOICE_BOX
+    }
+
 }
 
 data class DynamicParent(
     val backgroundColor: String = "#FFFFFF",
-) : Dynamics()
+) : Dynamics(DynamicsTypes.TEXT)
 
 data class DynamicText(
     val text: String,
@@ -23,7 +29,8 @@ data class DynamicText(
     val spaceStart: Int = 0,
     val spaceEnd: Int = 0,
     val horizontalAlignment: Int = H_ALIGNMENT_START
-) : Dynamics() {
+) : Dynamics(DynamicsTypes.TEXT) {
+
 
     companion object {
 
@@ -48,5 +55,13 @@ data class DynamicImage(
     val spaceStart: Int = 0,
     val spaceEnd: Int = 0,
     val horizontalAlignment: Int = H_ALIGNMENT_START
-) : Dynamics()
+) : Dynamics(DynamicsTypes.IMAGE)
+
+data class DynamicChoiceBox(
+     val text : String? = null,
+     val image : Int? = null,
+     val isRight : Boolean,
+     val boxId : Int = 0 // This id could be used to track the right choices.
+) : Dynamics(DynamicsTypes.CHOICE_BOX){
+}
 
