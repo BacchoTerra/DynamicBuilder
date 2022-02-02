@@ -1,6 +1,6 @@
 package com.simpleplus.dynamicbuilder.model
 
-open class Dynamics (val type : DynamicsTypes){
+open class Dynamics(val type: DynamicsTypes) {
 
     companion object {
         const val H_ALIGNMENT_START = 0
@@ -9,9 +9,12 @@ open class Dynamics (val type : DynamicsTypes){
     }
 
     enum class DynamicsTypes {
+
+        PARENT,
         TEXT,
         IMAGE,
-        CHOICE_BOX
+        CHOICE_BOX,
+        CHOICE_LAYOUT,
     }
 
 }
@@ -58,10 +61,17 @@ data class DynamicImage(
 ) : Dynamics(DynamicsTypes.IMAGE)
 
 data class DynamicChoiceBox(
-     val text : String? = null,
-     val image : Int? = null,
-     val isRight : Boolean,
-     val boxId : Int = 0 // This id could be used to track the right choices.
-) : Dynamics(DynamicsTypes.CHOICE_BOX){
-}
+    val text: String? = null,
+    val image: Int? = null,
+    val isRight: Boolean,
+    val boxId: Int = 0 // This id could be used to track the right choices.
+) : Dynamics(DynamicsTypes.CHOICE_BOX)
+
+class DynamicChoiceLayout(
+    val isMultiChoice: Boolean = false,
+    val choices: List<DynamicChoiceBox>
+) :
+    Dynamics(DynamicsTypes.CHOICE_LAYOUT)
+
+
 

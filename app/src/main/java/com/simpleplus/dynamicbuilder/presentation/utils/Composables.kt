@@ -2,15 +2,13 @@ package com.simpleplus.dynamicbuilder.presentation.utils
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,11 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
 import com.simpleplus.dynamicbuilder.R
-import com.simpleplus.dynamicbuilder.model.DynamicChoiceBox
-import com.simpleplus.dynamicbuilder.model.DynamicImage
-import com.simpleplus.dynamicbuilder.model.DynamicText
-import com.simpleplus.dynamicbuilder.model.Dynamics
+import com.simpleplus.dynamicbuilder.model.*
+import kotlin.concurrent.thread
 
 @Composable
 fun DynamicText(dynamicText: DynamicText) {
@@ -69,11 +67,12 @@ fun DynamicImage(dynamicImage: DynamicImage) {
         }
     ) {
         Image(
-            painterResource(id = dynamicImage.image),
+            /*painterResource(id = dynamicImage.image)*/
+            painterResource(id = R.drawable.ic_baseline_accessible_forward_24),
             contentDescription = null,
             modifier = Modifier
-                .width(dynamicImage.width.dp)
-                .height(dynamicImage.height.dp)
+                .width(120.dp)
+                .height(120.dp)
                 .padding(
                     top = dynamicImage.spaceTop.dp,
                     bottom = dynamicImage.spaceBottom.dp,
@@ -85,19 +84,28 @@ fun DynamicImage(dynamicImage: DynamicImage) {
 }
 
 @Composable
-fun DynamicChoiceBox(dynamicBox: DynamicChoiceBox) {
+private fun DynamicChoiceBox(
+    dynamicBox: DynamicChoiceBox,
+    currentSelectedBoxesId: List<Int> = emptyList(),
+    onClick: (DynamicChoiceBox) -> Unit = {}
+) {
 
     Box(
         modifier = Modifier
             .background(
-                if (dynamicBox.isRight) Color(0xFF9CCC65) else Color(0xFF29B6F6),
+                if (currentSelectedBoxesId.contains(dynamicBox.boxId)) Color(0xFF9CCC65) else Color(
+                    0xFF29B6F6
+                ),
                 RoundedCornerShape(16.dp)
             )
             .padding(top = 1.dp, bottom = 8.dp, start = 1.dp, end = 1.dp)
             .background(
-                if (dynamicBox.isRight) Color(0xFFE2F5CD) else MaterialTheme.colors.surface,
+                if (currentSelectedBoxesId.contains(dynamicBox.boxId)) Color(0xFFE2F5CD) else MaterialTheme.colors.surface,
                 RoundedCornerShape(16.dp)
             )
+            .clickable {
+                onClick(dynamicBox)
+            }
     ) {
 
         Column(
@@ -133,10 +141,45 @@ fun DynamicChoiceBox(dynamicBox: DynamicChoiceBox) {
     }
 }
 
+@Composable
+fun DynamicChoiceLayout(
+    dynamicChoiceLayout: DynamicChoiceLayout,
+) {
+
+    val currentSelectedBoxesId = remember {
+        mutableStateListOf(-1)
+    }
+
+
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        mainAxisAlignment = FlowMainAxisAlignment.Center,
+        mainAxisSpacing = 16.dp,
+        crossAxisSpacing = 16.dp
+    ) {
+        dynamicChoiceLayout.choices.forEach {
+
+            DynamicChoiceBox(
+                dynamicBox = it,
+                currentSelectedBoxesId = currentSelectedBoxesId
+            ) { box ->
+
+                if (!dynamicChoiceLayout.isMultiChoice) currentSelectedBoxesId.clear()
+
+                if (currentSelectedBoxesId.contains(it.boxId)) {
+                    currentSelectedBoxesId.remove(box.boxId)
+                } else {
+                    currentSelectedBoxesId.add(box.boxId)
+                }
+            }
+        }
+    }
+}
+
 
 @Preview
 @Composable
-fun Prev() {
+fun BoxesPrev() {
 
     val box by remember {
         mutableStateOf(DynamicChoiceBox("Simple Text", R.drawable.ic_baseline_adb_24, true))
@@ -144,7 +187,7 @@ fun Prev() {
 
     val box2 by remember {
         mutableStateOf(
-           DynamicChoiceBox(
+            DynamicChoiceBox(
                 "Slightly larger text",
                 R.drawable.ic_baseline_adb_24,
                 false
@@ -158,6 +201,21 @@ fun Prev() {
         DynamicChoiceBox(dynamicBox = box2)
 
     }
+}
 
+@Preview
+@Composable
+fun BoxesLayoutPrev() {
 
+    DynamicChoiceLayout(
+        dynamicChoiceLayout = DynamicChoiceLayout(
+            isMultiChoice = true, listOf(
+                DynamicChoiceBox("Box 1", null, true, boxId = 0),
+                DynamicChoiceBox("Box 2", null, true, boxId = 1),
+                DynamicChoiceBox("Box 3", null, true, boxId = 2),
+                DynamicChoiceBox("Box 4", null, true, boxId = 3),
+                DynamicChoiceBox("Box 1", null, true, boxId = 4)
+            )
+        ),
+    )
 }
