@@ -1,5 +1,6 @@
 package com.simpleplus.dynamicbuilder.presentation.utils
 
+import com.simpleplus.dynamicbuilder.model.DynamicHeaders
 import com.simpleplus.dynamicbuilder.model.DynamicParent
 import com.simpleplus.dynamicbuilder.model.Dynamics
 import com.squareup.moshi.JsonAdapter
@@ -58,9 +59,33 @@ class DynamicsHandler {
 
         const val EXAMPLE_FOR_UI = "{\n" +
                 "  \"parent\": {\n" +
-                "    \"backgroundColor\": \"#FFFFFF\"\n" +
+                "    \"backgroundColor\": \"#FFFFFF\",\n" +
+                "    \"btnText\": \"Btn text\"\n" +
                 "  },\n" +
                 "  \"items\": [\n" +
+                "    {\n" +
+                "      \"items\": [\n" +
+                "        {\n" +
+                "          \"backgroundColor\": \"#FFFFFF\",\n" +
+                "          \"iconTint\": \"#FFFFFF\",\n" +
+                "          \"icon\": 0,\n" +
+                "          \"type\": \"HEADER_ITEM\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "          \"backgroundColor\": \"#FFFFFF\",\n" +
+                "          \"iconTint\": \"#FFFFFF\",\n" +
+                "          \"icon\": 0,\n" +
+                "          \"type\": \"HEADER_ITEM\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "          \"backgroundColor\": \"#FFFFFF\",\n" +
+                "          \"iconTint\": \"#FFFFFF\",\n" +
+                "          \"icon\": 0,\n" +
+                "          \"type\": \"HEADER_ITEM\"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"type\": \"HEADER\"\n" +
+                "    },\n" +
                 "    {\n" +
                 "      \"text\": \"Elias é um elefeante que incomoda muita gente.\",\n" +
                 "      \"style\": 5,\n" +
@@ -95,25 +120,36 @@ class DynamicsHandler {
                 "      \"type\": \"IMAGE\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"isMultiChoice\": true,\n" +
+                "      \"isMultiChoice\": false,\n" +
                 "      \"choices\": [\n" +
                 "        {\n" +
-                "          \"text\": \"false choice box\",\n" +
+                "          \"text\": \"True\",\n" +
                 "          \"image\": null,\n" +
-                "          \"isRight\": false,\n" +
+                "          \"isRight\": true,\n" +
                 "          \"boxId\": 0\n" +
                 "        },\n" +
                 "        {\n" +
-                "          \"text\": \"true choice box\",\n" +
+                "          \"text\": \"False\",\n" +
                 "          \"image\": null,\n" +
-                "          \"isRight\": true,\n" +
+                "          \"isRight\": false,\n" +
                 "          \"boxId\": 1\n" +
                 "        },\n" +
                 "        {\n" +
-                "          \"text\": \"false choice box 2\",\n" +
+                "          \"text\": \"False\",\n" +
                 "          \"image\": null,\n" +
                 "          \"isRight\": false,\n" +
                 "          \"boxId\": 2\n" +
+                "        },\n" +
+                "        {\n" +
+                "          \"text\": \"False\",\n" +
+                "          \"image\": null,\n" +
+                "          \"isRight\": false,\n" +
+                "          \"boxId\": 23\n" +
+                "        },\n" +     "        {\n" +
+                "          \"text\": \"False\",\n" +
+                "          \"image\": null,\n" +
+                "          \"isRight\": false,\n" +
+                "          \"boxId\": 28\n" +
                 "        }\n" +
                 "      ],\n" +
                 "      \"type\": \"CHOICE_LAYOUT\"\n" +
@@ -134,7 +170,18 @@ class DynamicsHandler {
         moshi = Moshi.Builder()
             .add(
                 PolymorphicJsonAdapterFactory.of(Dynamics::class.java, "type")
-                    .withSubtype(DynamicParent::class.java, Dynamics.DynamicsTypes.PARENT.name)
+                    .withSubtype(
+                        DynamicParent::class.java,
+                        Dynamics.DynamicsTypes.PARENT.name
+                    )
+                    .withSubtype(
+                        DynamicHeaders::class.java,
+                        Dynamics.DynamicsTypes.HEADER.name
+                    )
+                    .withSubtype(
+                        DynamicHeaders.DynamicHeaderItem::class.java,
+                        Dynamics.DynamicsTypes.HEADER_ITEM.name
+                    )
                     .withSubtype(
                         com.simpleplus.dynamicbuilder.model.DynamicText::class.java,
                         Dynamics.DynamicsTypes.TEXT.name
@@ -144,7 +191,7 @@ class DynamicsHandler {
                         Dynamics.DynamicsTypes.IMAGE.name
                     )
                     .withSubtype(
-                        com.simpleplus.dynamicbuilder.model.DynamicChoiceBox::class.java,
+                        com.simpleplus.dynamicbuilder.model.DynamicChoiceLayout.DynamicChoiceBox::class.java,
                         Dynamics.DynamicsTypes.CHOICE_BOX.name
                     )
                     .withSubtype(

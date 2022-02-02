@@ -20,7 +20,51 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.simpleplus.dynamicbuilder.R
 import com.simpleplus.dynamicbuilder.model.*
+import com.simpleplus.dynamicbuilder.presentation.viewmodel.MainViewModel
 import kotlin.concurrent.thread
+
+@Composable
+fun DynamicHeader(items: List<DynamicHeaders.DynamicHeaderItem>) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        items.forEach {
+            Spacer(modifier = Modifier.width(8.dp))
+            DynamicHeaderItem(item = it)
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+    }
+}
+
+@Composable
+fun DynamicHeaderItem(item: DynamicHeaders.DynamicHeaderItem) {
+
+    Box(
+        modifier = Modifier
+            .size(48.dp)
+            .background(
+                color = Color(0xFFAB47BC),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(top = 1.dp, end = 1.dp, start = 1.dp, bottom = 6.dp)
+            .background(
+                color = Color(android.graphics.Color.parseColor(item.backgroundColor)),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(6.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_accessible_forward_24),
+            contentDescription = null,
+            tint = Color(android.graphics.Color.parseColor(item.iconTint))
+        )
+    }
+}
 
 @Composable
 fun DynamicText(dynamicText: DynamicText) {
@@ -85,9 +129,9 @@ fun DynamicImage(dynamicImage: DynamicImage) {
 
 @Composable
 private fun DynamicChoiceBox(
-    dynamicBox: DynamicChoiceBox,
+    dynamicBox: DynamicChoiceLayout.DynamicChoiceBox,
     currentSelectedBoxesId: List<Int> = emptyList(),
-    onClick: (DynamicChoiceBox) -> Unit = {}
+    onClick: (DynamicChoiceLayout.DynamicChoiceBox) -> Unit = {}
 ) {
 
     Box(
@@ -144,11 +188,8 @@ private fun DynamicChoiceBox(
 @Composable
 fun DynamicChoiceLayout(
     dynamicChoiceLayout: DynamicChoiceLayout,
+    vm : MainViewModel
 ) {
-
-    val currentSelectedBoxesId = remember {
-        mutableStateListOf(-1)
-    }
 
 
     FlowRow(
@@ -161,15 +202,15 @@ fun DynamicChoiceLayout(
 
             DynamicChoiceBox(
                 dynamicBox = it,
-                currentSelectedBoxesId = currentSelectedBoxesId
+                currentSelectedBoxesId = vm.currentSelectedChoices
             ) { box ->
 
-                if (!dynamicChoiceLayout.isMultiChoice) currentSelectedBoxesId.clear()
+                if (!dynamicChoiceLayout.isMultiChoice) vm.currentSelectedChoices.clear()
 
-                if (currentSelectedBoxesId.contains(it.boxId)) {
-                    currentSelectedBoxesId.remove(box.boxId)
+                if (vm.currentSelectedChoices.contains(it.boxId)) {
+                    vm.currentSelectedChoices.remove(box.boxId)
                 } else {
-                    currentSelectedBoxesId.add(box.boxId)
+                    vm.currentSelectedChoices.add(box.boxId)
                 }
             }
         }
@@ -182,12 +223,18 @@ fun DynamicChoiceLayout(
 fun BoxesPrev() {
 
     val box by remember {
-        mutableStateOf(DynamicChoiceBox("Simple Text", R.drawable.ic_baseline_adb_24, true))
+        mutableStateOf(
+            DynamicChoiceLayout.DynamicChoiceBox(
+                "Simple Text",
+                R.drawable.ic_baseline_adb_24,
+                true
+            )
+        )
     }
 
     val box2 by remember {
         mutableStateOf(
-            DynamicChoiceBox(
+            DynamicChoiceLayout.DynamicChoiceBox(
                 "Slightly larger text",
                 R.drawable.ic_baseline_adb_24,
                 false
@@ -203,6 +250,7 @@ fun BoxesPrev() {
     }
 }
 
+
 @Preview
 @Composable
 fun BoxesLayoutPrev() {
@@ -210,12 +258,30 @@ fun BoxesLayoutPrev() {
     DynamicChoiceLayout(
         dynamicChoiceLayout = DynamicChoiceLayout(
             isMultiChoice = true, listOf(
-                DynamicChoiceBox("Box 1", null, true, boxId = 0),
-                DynamicChoiceBox("Box 2", null, true, boxId = 1),
-                DynamicChoiceBox("Box 3", null, true, boxId = 2),
-                DynamicChoiceBox("Box 4", null, true, boxId = 3),
-                DynamicChoiceBox("Box 1", null, true, boxId = 4)
+                DynamicChoiceLayout.DynamicChoiceBox("Box 1", null, true, boxId = 0),
+                DynamicChoiceLayout.DynamicChoiceBox("Box 2", null, true, boxId = 1),
+                DynamicChoiceLayout.DynamicChoiceBox("Box 3", null, true, boxId = 2),
+                DynamicChoiceLayout.DynamicChoiceBox("Box 4", null, true, boxId = 3),
+                DynamicChoiceLayout.DynamicChoiceBox("Box 1", null, true, boxId = 4)
             )
         ),
+        MainViewModel()
     )
+}
+
+@Preview
+@Composable
+fun HeaderPrev() {
+
+    val items: List<DynamicHeaders.DynamicHeaderItem> = remember {
+        mutableStateListOf(
+            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0)
+        )
+    }
+
+    DynamicHeader(items = items)
+
 }

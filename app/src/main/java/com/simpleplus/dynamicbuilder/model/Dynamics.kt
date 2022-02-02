@@ -11,6 +11,8 @@ open class Dynamics(val type: DynamicsTypes) {
     enum class DynamicsTypes {
 
         PARENT,
+        HEADER,
+        HEADER_ITEM,
         TEXT,
         IMAGE,
         CHOICE_BOX,
@@ -21,7 +23,18 @@ open class Dynamics(val type: DynamicsTypes) {
 
 data class DynamicParent(
     val backgroundColor: String = "#FFFFFF",
-) : Dynamics(DynamicsTypes.TEXT)
+    val btnText : String = "Continue"
+) : Dynamics(DynamicsTypes.PARENT)
+
+data class DynamicHeaders(val items: List<DynamicHeaderItem>) : Dynamics(DynamicsTypes.HEADER) {
+
+    data class DynamicHeaderItem(
+        val backgroundColor: String,
+        val iconTint: String,
+        val icon: Int
+    ):Dynamics(DynamicsTypes.HEADER_ITEM)
+
+}
 
 data class DynamicText(
     val text: String,
@@ -60,18 +73,19 @@ data class DynamicImage(
     val horizontalAlignment: Int = H_ALIGNMENT_START
 ) : Dynamics(DynamicsTypes.IMAGE)
 
-data class DynamicChoiceBox(
-    val text: String? = null,
-    val image: Int? = null,
-    val isRight: Boolean,
-    val boxId: Int = 0 // This id could be used to track the right choices.
-) : Dynamics(DynamicsTypes.CHOICE_BOX)
-
 class DynamicChoiceLayout(
     val isMultiChoice: Boolean = false,
-    val choices: List<DynamicChoiceBox>
-) :
-    Dynamics(DynamicsTypes.CHOICE_LAYOUT)
+    val choices: List<DynamicChoiceBox>,
+) : Dynamics(DynamicsTypes.CHOICE_LAYOUT) {
+
+    data class DynamicChoiceBox(
+        val text: String? = null,
+        val image: Int? = null,
+        val isRight: Boolean,
+        val boxId: Int = 0 // This id could be used to track the right choices.
+    ) : Dynamics(DynamicsTypes.CHOICE_BOX)
+
+}
 
 
 
