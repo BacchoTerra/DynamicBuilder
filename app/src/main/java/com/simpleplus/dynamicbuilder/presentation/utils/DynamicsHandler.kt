@@ -99,11 +99,15 @@ class DynamicsHandler {
                 "          \"text\": \"False\",\n" +
                 "          \"image\": null,\n" +
                 "          \"isRight\": false,\n" +
-                "          \"boxId\": 23\n" +
+                "          \"boxId\": 3\n" +
                 "        }\n" +
                 "      ],\n" +
                 "      \"type\": \"CHOICE_LAYOUT\"\n" +
                 "    }\n" +
+                "  ],\n" +
+                "  \"answers\": [\n" +
+                "    0,\n" +
+                "    1\n" +
                 "  ]\n" +
                 "}"
 

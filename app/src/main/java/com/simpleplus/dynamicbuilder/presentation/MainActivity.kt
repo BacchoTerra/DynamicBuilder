@@ -70,8 +70,8 @@ class MainActivity : ComponentActivity() {
                             Button(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    vm.checkAnswerFromChoiceLayout {isCorrect ->
-                                        if (isCorrect){
+                                    vm.checkAnswerFromChoiceLayout {isAnswerCorrect ->
+                                        if (isAnswerCorrect){
                                             Toast.makeText(this@MainActivity,"Congratulations!",Toast.LENGTH_SHORT).show()
                                         }else{
                                             Toast.makeText(this@MainActivity,"Try again!",Toast.LENGTH_SHORT).show()
