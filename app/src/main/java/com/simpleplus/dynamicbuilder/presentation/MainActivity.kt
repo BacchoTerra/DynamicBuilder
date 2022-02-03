@@ -1,14 +1,11 @@
 package com.simpleplus.dynamicbuilder.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -44,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 Surface() {
 
                     val uiElements by remember {
-                        mutableStateOf(vm.uiItems.items)
+                        mutableStateOf(vm.uiItems.uiElements)
                     }
 
                     Column(
@@ -56,10 +53,10 @@ class MainActivity : ComponentActivity() {
                         for (i in uiElements) {
 
                             when (i) {
-                                is DynamicText -> DynamicText(dynamicText = i)
-                                is DynamicImage -> DynamicImage(dynamicImage = i)
-                                is DynamicChoiceLayout -> DynamicChoiceLayout(dynamicChoiceLayout = i,vm)
-                                is DynamicHeaders -> DynamicHeader(items = i.items)
+                                is DynamicText -> DynText(dynamicText = i)
+                                is DynamicImage -> DynImage(dynamicImage = i)
+                                is DynamicChoiceBoxContainer -> DynChoiceBoxesContainer(dynamicChoiceBoxContainer = i,vm)
+                                is DynamicHeadersContainer -> DynHeadersContainer(items = i.items)
                             }
                         }
 

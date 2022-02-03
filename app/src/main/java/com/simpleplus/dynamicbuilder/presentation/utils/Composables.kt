@@ -21,10 +21,9 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.simpleplus.dynamicbuilder.R
 import com.simpleplus.dynamicbuilder.model.*
 import com.simpleplus.dynamicbuilder.presentation.viewmodel.MainViewModel
-import kotlin.concurrent.thread
 
 @Composable
-fun DynamicHeader(items: List<DynamicHeaders.DynamicHeaderItem>) {
+fun DynHeadersContainer(items: List<DynamicHeadersContainer.DynamicHeaderItem>) {
 
     Row(
         modifier = Modifier
@@ -34,14 +33,14 @@ fun DynamicHeader(items: List<DynamicHeaders.DynamicHeaderItem>) {
     ) {
         items.forEach {
             Spacer(modifier = Modifier.width(8.dp))
-            DynamicHeaderItem(item = it)
+            DynHeaderItem(item = it)
             Spacer(modifier = Modifier.width(8.dp))
         }
     }
 }
 
 @Composable
-fun DynamicHeaderItem(item: DynamicHeaders.DynamicHeaderItem) {
+fun DynHeaderItem(item: DynamicHeadersContainer.DynamicHeaderItem) {
 
     Box(
         modifier = Modifier
@@ -67,7 +66,7 @@ fun DynamicHeaderItem(item: DynamicHeaders.DynamicHeaderItem) {
 }
 
 @Composable
-fun DynamicText(dynamicText: DynamicText) {
+fun DynText(dynamicText: DynamicText) {
 
     Text(
         text = dynamicText.text,
@@ -99,7 +98,7 @@ fun DynamicText(dynamicText: DynamicText) {
 }
 
 @Composable
-fun DynamicImage(dynamicImage: DynamicImage) {
+fun DynImage(dynamicImage: DynamicImage) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -128,10 +127,42 @@ fun DynamicImage(dynamicImage: DynamicImage) {
 }
 
 @Composable
-private fun DynamicChoiceBox(
-    dynamicBox: DynamicChoiceLayout.DynamicChoiceBox,
+fun DynChoiceBoxesContainer(
+    dynamicChoiceBoxContainer: DynamicChoiceBoxContainer,
+    vm : MainViewModel
+) {
+
+
+    FlowRow(
+        modifier = Modifier.fillMaxWidth(),
+        mainAxisAlignment = FlowMainAxisAlignment.Center,
+        mainAxisSpacing = 16.dp,
+        crossAxisSpacing = 16.dp
+    ) {
+        dynamicChoiceBoxContainer.boxes.forEach {
+
+            DynChoiceBox(
+                dynamicBox = it,
+                currentSelectedBoxesId = vm.currentSelectedChoices
+            ) { box ->
+
+                if (!dynamicChoiceBoxContainer.isMultiChoice) vm.currentSelectedChoices.clear()
+
+                if (vm.currentSelectedChoices.contains(it.boxId)) {
+                    vm.currentSelectedChoices.remove(box.boxId)
+                } else {
+                    vm.currentSelectedChoices.add(box.boxId)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DynChoiceBox(
+    dynamicBox: DynamicChoiceBoxContainer.DynamicChoiceBox,
     currentSelectedBoxesId: List<Int> = emptyList(),
-    onClick: (DynamicChoiceLayout.DynamicChoiceBox) -> Unit = {}
+    onClick: (DynamicChoiceBoxContainer.DynamicChoiceBox) -> Unit = {}
 ) {
 
     Box(
@@ -185,38 +216,6 @@ private fun DynamicChoiceBox(
     }
 }
 
-@Composable
-fun DynamicChoiceLayout(
-    dynamicChoiceLayout: DynamicChoiceLayout,
-    vm : MainViewModel
-) {
-
-
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        mainAxisAlignment = FlowMainAxisAlignment.Center,
-        mainAxisSpacing = 16.dp,
-        crossAxisSpacing = 16.dp
-    ) {
-        dynamicChoiceLayout.choices.forEach {
-
-            DynamicChoiceBox(
-                dynamicBox = it,
-                currentSelectedBoxesId = vm.currentSelectedChoices
-            ) { box ->
-
-                if (!dynamicChoiceLayout.isMultiChoice) vm.currentSelectedChoices.clear()
-
-                if (vm.currentSelectedChoices.contains(it.boxId)) {
-                    vm.currentSelectedChoices.remove(box.boxId)
-                } else {
-                    vm.currentSelectedChoices.add(box.boxId)
-                }
-            }
-        }
-    }
-}
-
 
 @Preview
 @Composable
@@ -224,7 +223,7 @@ fun BoxesPrev() {
 
     val box by remember {
         mutableStateOf(
-            DynamicChoiceLayout.DynamicChoiceBox(
+            DynamicChoiceBoxContainer.DynamicChoiceBox(
                 "Simple Text",
                 R.drawable.ic_baseline_adb_24,
                 true
@@ -234,7 +233,7 @@ fun BoxesPrev() {
 
     val box2 by remember {
         mutableStateOf(
-            DynamicChoiceLayout.DynamicChoiceBox(
+            DynamicChoiceBoxContainer.DynamicChoiceBox(
                 "Slightly larger text",
                 R.drawable.ic_baseline_adb_24,
                 false
@@ -244,8 +243,8 @@ fun BoxesPrev() {
 
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxSize()) {
 
-        DynamicChoiceBox(dynamicBox = box)
-        DynamicChoiceBox(dynamicBox = box2)
+        DynChoiceBox(dynamicBox = box)
+        DynChoiceBox(dynamicBox = box2)
 
     }
 }
@@ -255,14 +254,14 @@ fun BoxesPrev() {
 @Composable
 fun BoxesLayoutPrev() {
 
-    DynamicChoiceLayout(
-        dynamicChoiceLayout = DynamicChoiceLayout(
+    DynChoiceBoxesContainer(
+        dynamicChoiceBoxContainer = DynamicChoiceBoxContainer(
             isMultiChoice = true, listOf(
-                DynamicChoiceLayout.DynamicChoiceBox("Box 1", null, true, boxId = 0),
-                DynamicChoiceLayout.DynamicChoiceBox("Box 2", null, true, boxId = 1),
-                DynamicChoiceLayout.DynamicChoiceBox("Box 3", null, true, boxId = 2),
-                DynamicChoiceLayout.DynamicChoiceBox("Box 4", null, true, boxId = 3),
-                DynamicChoiceLayout.DynamicChoiceBox("Box 1", null, true, boxId = 4)
+                DynamicChoiceBoxContainer.DynamicChoiceBox("Box 1", null, true, boxId = 0),
+                DynamicChoiceBoxContainer.DynamicChoiceBox("Box 2", null, true, boxId = 1),
+                DynamicChoiceBoxContainer.DynamicChoiceBox("Box 3", null, true, boxId = 2),
+                DynamicChoiceBoxContainer.DynamicChoiceBox("Box 4", null, true, boxId = 3),
+                DynamicChoiceBoxContainer.DynamicChoiceBox("Box 1", null, true, boxId = 4)
             )
         ),
         MainViewModel()
@@ -273,15 +272,15 @@ fun BoxesLayoutPrev() {
 @Composable
 fun HeaderPrev() {
 
-    val items: List<DynamicHeaders.DynamicHeaderItem> = remember {
+    val items: List<DynamicHeadersContainer.DynamicHeaderItem> = remember {
         mutableStateListOf(
-            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
-            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
-            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
-            DynamicHeaders.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0)
+            DynamicHeadersContainer.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeadersContainer.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeadersContainer.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0),
+            DynamicHeadersContainer.DynamicHeaderItem("#FF26C6DA", "#FF9CCC65", 0)
         )
     }
 
-    DynamicHeader(items = items)
+    DynHeadersContainer(items = items)
 
 }

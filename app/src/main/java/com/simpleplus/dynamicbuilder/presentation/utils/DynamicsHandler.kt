@@ -1,6 +1,6 @@
 package com.simpleplus.dynamicbuilder.presentation.utils
 
-import com.simpleplus.dynamicbuilder.model.DynamicHeaders
+import com.simpleplus.dynamicbuilder.model.DynamicHeadersContainer
 import com.simpleplus.dynamicbuilder.model.DynamicParent
 import com.simpleplus.dynamicbuilder.model.Dynamics
 import com.squareup.moshi.JsonAdapter
@@ -12,57 +12,12 @@ class DynamicsHandler {
 
     companion object {
 
-        const val EXAMPLE_JSON_FOR_LOG = "{\n" +
-                "  \"items\": [\n" +
-                "    {\n" +
-                "      \"text\": \"This is the text\",\n" +
-                "      \"style\": 0,\n" +
-                "      \"color\": \"#000000\",\n" +
-                "      \"spaceTop\": 16,\n" +
-                "      \"spaceBottom\": 16,\n" +
-                "      \"spaceStart\": 16,\n" +
-                "      \"spaceEnd\": 16,\n" +
-                "      \"horizontalAlignment\": 0,\n" +
-                "      \"type\": \"TEXT\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"text\": \"This is the text\",\n" +
-                "      \"style\": 0,\n" +
-                "      \"color\": \"#000000\",\n" +
-                "      \"spaceTop\": 16,\n" +
-                "      \"spaceBottom\": 16,\n" +
-                "      \"spaceStart\": 16,\n" +
-                "      \"spaceEnd\": 16,\n" +
-                "      \"horizontalAlignment\": 0,\n" +
-                "      \"type\": \"TEXT\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"image\": 5,\n" +
-                "      \"width\": 24,\n" +
-                "      \"height\": 24,\n" +
-                "      \"spaceTop\": 16,\n" +
-                "      \"spaceBottom\": 16,\n" +
-                "      \"spaceStart\": 16,\n" +
-                "      \"spaceEnd\": 16,\n" +
-                "      \"horizontalAlignment\": 0,\n" +
-                "      \"type\": \"IMAGE\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"text\": \"This is the text\",\n" +
-                "      \"image\": null,\n" +
-                "      \"isRight\": true,\n" +
-                "      \"boxId\": 0,\n" +
-                "      \"type\": \"CHOICE_BOX\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}"
-
-        const val EXAMPLE_FOR_UI = "{\n" +
+        const val JSON_FOR_UI = "{\n" +
                 "  \"parent\": {\n" +
                 "    \"backgroundColor\": \"#FFFFFF\",\n" +
                 "    \"btnText\": \"Btn text\"\n" +
                 "  },\n" +
-                "  \"items\": [\n" +
+                "  \"uiElements\": [\n" +
                 "    {\n" +
                 "      \"items\": [\n" +
                 "        {\n" +
@@ -120,8 +75,8 @@ class DynamicsHandler {
                 "      \"type\": \"IMAGE\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"isMultiChoice\": false,\n" +
-                "      \"choices\": [\n" +
+                "      \"isMultiChoice\": true,\n" +
+                "      \"boxes\": [\n" +
                 "        {\n" +
                 "          \"text\": \"True\",\n" +
                 "          \"image\": null,\n" +
@@ -129,9 +84,9 @@ class DynamicsHandler {
                 "          \"boxId\": 0\n" +
                 "        },\n" +
                 "        {\n" +
-                "          \"text\": \"False\",\n" +
+                "          \"text\": \"True\",\n" +
                 "          \"image\": null,\n" +
-                "          \"isRight\": false,\n" +
+                "          \"isRight\": true,\n" +
                 "          \"boxId\": 1\n" +
                 "        },\n" +
                 "        {\n" +
@@ -145,11 +100,6 @@ class DynamicsHandler {
                 "          \"image\": null,\n" +
                 "          \"isRight\": false,\n" +
                 "          \"boxId\": 23\n" +
-                "        },\n" +     "        {\n" +
-                "          \"text\": \"False\",\n" +
-                "          \"image\": null,\n" +
-                "          \"isRight\": false,\n" +
-                "          \"boxId\": 28\n" +
                 "        }\n" +
                 "      ],\n" +
                 "      \"type\": \"CHOICE_LAYOUT\"\n" +
@@ -175,11 +125,11 @@ class DynamicsHandler {
                         Dynamics.DynamicsTypes.PARENT.name
                     )
                     .withSubtype(
-                        DynamicHeaders::class.java,
+                        DynamicHeadersContainer::class.java,
                         Dynamics.DynamicsTypes.HEADER.name
                     )
                     .withSubtype(
-                        DynamicHeaders.DynamicHeaderItem::class.java,
+                        DynamicHeadersContainer.DynamicHeaderItem::class.java,
                         Dynamics.DynamicsTypes.HEADER_ITEM.name
                     )
                     .withSubtype(
@@ -191,11 +141,11 @@ class DynamicsHandler {
                         Dynamics.DynamicsTypes.IMAGE.name
                     )
                     .withSubtype(
-                        com.simpleplus.dynamicbuilder.model.DynamicChoiceLayout.DynamicChoiceBox::class.java,
+                        com.simpleplus.dynamicbuilder.model.DynamicChoiceBoxContainer.DynamicChoiceBox::class.java,
                         Dynamics.DynamicsTypes.CHOICE_BOX.name
                     )
                     .withSubtype(
-                        com.simpleplus.dynamicbuilder.model.DynamicChoiceLayout::class.java,
+                        com.simpleplus.dynamicbuilder.model.DynamicChoiceBoxContainer::class.java,
                         Dynamics.DynamicsTypes.CHOICE_LAYOUT.name
                     )
             )

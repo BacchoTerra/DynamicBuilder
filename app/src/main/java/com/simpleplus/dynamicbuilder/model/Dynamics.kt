@@ -1,6 +1,6 @@
 package com.simpleplus.dynamicbuilder.model
 
-open class Dynamics(val type: DynamicsTypes) {
+open class Dynamics(type: DynamicsTypes) {
 
     companion object {
         const val H_ALIGNMENT_START = 0
@@ -26,14 +26,13 @@ data class DynamicParent(
     val btnText : String = "Continue"
 ) : Dynamics(DynamicsTypes.PARENT)
 
-data class DynamicHeaders(val items: List<DynamicHeaderItem>) : Dynamics(DynamicsTypes.HEADER) {
+data class DynamicHeadersContainer(val items: List<DynamicHeaderItem>) : Dynamics(DynamicsTypes.HEADER) {
 
     data class DynamicHeaderItem(
         val backgroundColor: String,
         val iconTint: String,
         val icon: Int
     ):Dynamics(DynamicsTypes.HEADER_ITEM)
-
 }
 
 data class DynamicText(
@@ -47,7 +46,6 @@ data class DynamicText(
     val horizontalAlignment: Int = H_ALIGNMENT_START
 ) : Dynamics(DynamicsTypes.TEXT) {
 
-
     companion object {
 
         const val STYLE_H1 = 0
@@ -59,7 +57,6 @@ data class DynamicText(
         const val STYLE_NORMAL = 6
 
     }
-
 }
 
 data class DynamicImage(
@@ -73,9 +70,9 @@ data class DynamicImage(
     val horizontalAlignment: Int = H_ALIGNMENT_START
 ) : Dynamics(DynamicsTypes.IMAGE)
 
-class DynamicChoiceLayout(
+class DynamicChoiceBoxContainer(
     val isMultiChoice: Boolean = false,
-    val choices: List<DynamicChoiceBox>,
+    val boxes: List<DynamicChoiceBox>,
 ) : Dynamics(DynamicsTypes.CHOICE_LAYOUT) {
 
     data class DynamicChoiceBox(

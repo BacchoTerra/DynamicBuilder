@@ -1,6 +1,6 @@
 package com.simpleplus.dynamicbuilder.model
 
-class UIItems(
+class DynamicUI(
     val parent : DynamicParent,
-    val items : List<Dynamics>
+    val uiElements : List<Dynamics>
 )
