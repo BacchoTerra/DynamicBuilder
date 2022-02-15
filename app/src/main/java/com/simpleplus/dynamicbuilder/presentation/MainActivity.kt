@@ -1,6 +1,7 @@
 package com.simpleplus.dynamicbuilder.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp,top = 32.dp),
+                                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp, top = 32.dp),
                             contentAlignment = Alignment.BottomCenter
                         ) {
 

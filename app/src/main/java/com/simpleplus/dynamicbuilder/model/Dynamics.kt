@@ -43,6 +43,7 @@ data class DynamicText(
     val spaceBottom: Int = 0,
     val spaceStart: Int = 0,
     val spaceEnd: Int = 0,
+    val startHeaderItem : DynamicHeadersContainer.DynamicHeaderItem? = null,
     val horizontalAlignment: Int = H_ALIGNMENT_START
 ) : Dynamics(DynamicsTypes.TEXT) {
 

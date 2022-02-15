@@ -68,33 +68,47 @@ fun DynHeaderItem(item: DynamicHeadersContainer.DynamicHeaderItem) {
 @Composable
 fun DynText(dynamicText: DynamicText) {
 
-    Text(
-        text = dynamicText.text,
-        color = Color(android.graphics.Color.parseColor(dynamicText.color)),
-        style = when (dynamicText.style) {
-            DynamicText.STYLE_NORMAL -> MaterialTheme.typography.body2
-            DynamicText.STYLE_H1 -> MaterialTheme.typography.h1
-            DynamicText.STYLE_H2 -> MaterialTheme.typography.h2
-            DynamicText.STYLE_H3 -> MaterialTheme.typography.h3
-            DynamicText.STYLE_H4 -> MaterialTheme.typography.h4
-            DynamicText.STYLE_H5 -> MaterialTheme.typography.h5
-            DynamicText.STYLE_H6 -> MaterialTheme.typography.h6
-            else -> MaterialTheme.typography.body2
-        },
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                top = dynamicText.spaceTop.dp,
-                bottom = dynamicText.spaceBottom.dp,
-                start = dynamicText.spaceStart.dp,
-                end = dynamicText.spaceEnd.dp
-            ),
-        textAlign = when (dynamicText.horizontalAlignment) {
-            Dynamics.H_ALIGNMENT_START -> TextAlign.Start
-            Dynamics.H_ALIGNMENT_CENTER -> TextAlign.Center
-            else -> TextAlign.End
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        if (dynamicText.startHeaderItem != null) {
+            DynHeaderItem(item = dynamicText.startHeaderItem)
         }
-    )
+
+        Text(
+            text = dynamicText.text,
+            color = Color(android.graphics.Color.parseColor(dynamicText.color)),
+            style = when (dynamicText.style) {
+                DynamicText.STYLE_NORMAL -> MaterialTheme.typography.body2
+                DynamicText.STYLE_H1 -> MaterialTheme.typography.h1
+                DynamicText.STYLE_H2 -> MaterialTheme.typography.h2
+                DynamicText.STYLE_H3 -> MaterialTheme.typography.h3
+                DynamicText.STYLE_H4 -> MaterialTheme.typography.h4
+                DynamicText.STYLE_H5 -> MaterialTheme.typography.h5
+                DynamicText.STYLE_H6 -> MaterialTheme.typography.h6
+                else -> MaterialTheme.typography.body2
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = dynamicText.spaceTop.dp,
+                    bottom = dynamicText.spaceBottom.dp,
+                    start = dynamicText.spaceStart.dp,
+                    end = dynamicText.spaceEnd.dp
+                ),
+            textAlign = when (dynamicText.horizontalAlignment) {
+                Dynamics.H_ALIGNMENT_START -> TextAlign.Start
+                Dynamics.H_ALIGNMENT_CENTER -> TextAlign.Center
+                else -> TextAlign.End
+            }
+        )
+
+    }
 }
 
 @Composable
@@ -129,7 +143,7 @@ fun DynImage(dynamicImage: DynamicImage) {
 @Composable
 fun DynChoiceBoxesContainer(
     dynamicChoiceBoxContainer: DynamicChoiceBoxContainer,
-    vm : MainViewModel
+    vm: MainViewModel
 ) {
 
 

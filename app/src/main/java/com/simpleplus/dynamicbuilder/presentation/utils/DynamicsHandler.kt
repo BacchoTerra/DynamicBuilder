@@ -49,6 +49,12 @@ class DynamicsHandler {
                 "      \"spaceBottom\": 16,\n" +
                 "      \"spaceStart\": 16,\n" +
                 "      \"spaceEnd\": 16,\n" +
+                "      \"startHeaderItem\": {\n" +
+                "        \"backgroundColor\": \"#FFFFFF\",\n" +
+                "        \"iconTint\": \"#FFFFFF\",\n" +
+                "        \"icon\": 0,\n" +
+                "        \"type\": \"HEADER_ITEM\"\n" +
+                "      },\n" +
                 "      \"horizontalAlignment\": 1,\n" +
                 "      \"type\": \"TEXT\"\n" +
                 "    },\n" +
